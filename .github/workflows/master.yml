@@ -24,6 +24,6 @@ jobs:
         run: |
           lftp -e "
             set ftp:ssl-allow no;
-            mirror -R ./local-directory /remote-directory;
+            put -O /remote-directory index.html;
             quit
           " -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
