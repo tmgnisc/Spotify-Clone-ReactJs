@@ -16,6 +16,11 @@ jobs:
       - name: Install lftp
         run: sudo apt-get install lftp
 
+      - name: Debug FTP Connection
+        run: |
+          echo "FTP_HOST=${{ secrets.FTP_HOST }}"
+          echo "FTP_USERNAME=${{ secrets.FTP_USERNAME }}"
+        
       - name: Deploy to cPanel via FTP
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
@@ -24,6 +29,7 @@ jobs:
         run: |
           lftp -e "
             set ftp:ssl-allow no;
+            open -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST;
             mirror -R ./ /;
             quit
           " -u $FTP_USERNAME,$FTP_PASSWORD $FTP_HOST
